@@ -1,11 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="XamarinFormsCollectionViewTest.Views.MainPage"
-             Title="{Binding Title}">
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="XamarinFormsCollectionViewTest.Views.MainPage"
+    xmlns:templates="clr-namespace:XamarinFormsCollectionViewTest.Templates"
+    Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <templates:GoodStuffDataTemplate x:Key="GoodStuffDataTemplate" />
+            <templates:BetterStuffDataTemplate x:Key="BetterStuffDataTemplate" />
+        </ResourceDictionary>
 
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-        <Label Text="Welcome to Xamarin Forms and Prism!" />
-    </StackLayout>
+        <templates:StuffTemplateSelector
+            x:Key="StuffTemplateSelector"
+            GoodStuffTemplate="{StaticResource GoodStuffDataTemplate}"
+            BetterStuffTemplate="{StaticResource BetterStuffDataTemplate}"/>
+
+    </ContentPage.Resources>
+
+    <Grid>
+
+        <StackLayout>
+
+            <StackLayout
+                Orientation="Horizontal">
+
+                <Button
+                    Text="Get random stuff"
+                    Margin="10"
+                    HorizontalOptions="Center"
+                    Padding="5"
+                    BackgroundColor="GreenYellow"
+                    CornerRadius="10"
+                    Command="{Binding GenerateRandomStuffCommand}"/>
+
+                <Button
+                    Text="Get good stuff"
+                    Margin="10"
+                    HorizontalOptions="Center"
+                    Padding="5"
+                    BackgroundColor="GreenYellow"
+                    CornerRadius="10"
+                    Command="{Binding GenerateGoodStuffCommand}"/>
+
+                <Button
+                    Text="Get better stuff"
+                    Margin="10"
+                    HorizontalOptions="Center"
+                    Padding="5"
+                    BackgroundColor="GreenYellow"
+                    CornerRadius="10"
+                    Command="{Binding GenerateBetterStuffCommand}"/>
+
+            </StackLayout>
+            
+
+            <CollectionView
+                RemainingItemsThreshold="{Binding ItemThreshold}"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreStuffCommand}"
+                ItemTemplate="{StaticResource StuffTemplateSelector}"
+                ItemsSource="{Binding Stuff}">
+            </CollectionView>
+
+        </StackLayout>
+
+        <ActivityIndicator
+            WidthRequest="50"
+            HeightRequest="50"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            IsRunning="True"
+            IsVisible="{Binding IsBusy}"
+            Color="Blue"/>
+
+    </Grid>
 
 </ContentPage>
